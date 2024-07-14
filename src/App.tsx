@@ -1,5 +1,6 @@
 import './App.css'
 import TaskForm from "./containers/Tasks/TaskForm/TaskForm";
+import ShowTasks from "./containers/Tasks/ShowTasks/ShowTasks";
 
 
 function App() {
@@ -7,6 +8,7 @@ function App() {
   return (
     <>
     <TaskForm/>
+      <ShowTasks/>
     </>
   )
 }
