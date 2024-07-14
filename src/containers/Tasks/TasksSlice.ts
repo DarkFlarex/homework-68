@@ -1,7 +1,7 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import axiosApi from '../../axiosApi';
 import { RootState } from '../../app/store';
-import { ApiTask, Task} from '../../types';
+import { ApiTask, Task } from '../../types';
 
 export interface TaskState {
     tasks: Task[];
@@ -15,13 +15,13 @@ const initialState: TaskState = {
     error: false,
 };
 
-
 export const addTask = createAsyncThunk<Task, ApiTask, { state: RootState }>(
     'tasks/add', async (task: ApiTask) => {
         const response = await axiosApi.post('/tasks.json', task);
         return { ...task, id: response.data.name };
     }
 );
+
 export const tasksSlice = createSlice({
     name: 'tasks',
     initialState,
@@ -37,7 +37,7 @@ export const tasksSlice = createSlice({
             }).addCase(addTask.rejected, (state) => {
                 state.isLoading = false;
                 state.error = true;
-            })
+            });
     },
 });
 
