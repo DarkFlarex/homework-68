@@ -6,10 +6,10 @@ import ShowTasks from "./containers/Tasks/ShowTasks/ShowTasks";
 function App() {
 
   return (
-    <>
-    <TaskForm/>
+    <main className="container d-flex flex-column align-items-center">
+      <TaskForm/>
       <ShowTasks />
-    </>
+    </main>
   )
 }
 

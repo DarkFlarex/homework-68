@@ -50,6 +50,7 @@ export const deleteTask = createAsyncThunk<string, string, { state: RootState }>
     }
 );
 
+
 export const tasksSlice = createSlice({
     name: 'tasks',
     initialState,
@@ -78,14 +79,15 @@ export const tasksSlice = createSlice({
                 state.isLoading = true;
                 state.error = false;
             }).addCase(updateTask.fulfilled, (state, action) => {
-                const { id, task: updatedTask } = action.payload;
                 state.isLoading = false;
-                state.tasks = state.tasks.map(task => {
-                    if (task.id === id) {
-                        return { ...task, ...updatedTask };
-                    }
-                    return task;
-                });
+                const { id, task: updatedTask } = action.payload;
+                    state.isLoading = false;
+                    state.tasks = state.tasks.map(task => {
+                        if (task.id === id) {
+                            return { ...task, ...updatedTask };
+                        }
+                        return task;
+                    });
             }).addCase(updateTask.rejected, (state) => {
                 state.isLoading = false;
                 state.error = true;
@@ -93,12 +95,13 @@ export const tasksSlice = createSlice({
                 state.isLoading = true;
                 state.error = false;
             }).addCase(deleteTask.fulfilled, (state, action) => {
-               const ItemId = action.payload;
-               state.tasks = state.tasks.filter((task)=>
-               task.id !== ItemId);
+                state.isLoading = false;
+                const ItemId = action.payload;
+                   state.tasks = state.tasks.filter((task)=>
+                   task.id !== ItemId);
             }).addCase(deleteTask.rejected, (state) => {
-            state.isLoading = false;
-            state.error = true;
+                state.isLoading = false;
+                state.error = true;
             });
     },
 });
