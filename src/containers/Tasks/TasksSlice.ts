@@ -34,6 +34,22 @@ export const addTask = createAsyncThunk<Task, ApiTask, { state: RootState }>(
     }
 );
 
+export const updateTask = createAsyncThunk<{ id: string; task: Task },
+    { id: string; task: ApiTask }, { state: RootState }>(
+    'tasks/update', async ({ id, task }) => {
+        await axiosApi.put(`/tasks/${id}.json`, task);
+        return { id, task: { ...task, id } };
+    }
+);
+
+export const deleteTask = createAsyncThunk<string, string, { state: RootState }>(
+    'tasks/delete',
+    async (id) => {
+        await axiosApi.delete(`/tasks/${id}.json`);
+        return id;
+    }
+);
+
 export const tasksSlice = createSlice({
     name: 'tasks',
     initialState,
@@ -58,6 +74,31 @@ export const tasksSlice = createSlice({
             }).addCase(fetchTask.rejected, (state) => {
                 state.isLoading = false;
                 state.error = true;
+            }).addCase(updateTask.pending, (state) => {
+                state.isLoading = true;
+                state.error = false;
+            }).addCase(updateTask.fulfilled, (state, action) => {
+                const { id, task: updatedTask } = action.payload;
+                state.isLoading = false;
+                state.tasks = state.tasks.map(task => {
+                    if (task.id === id) {
+                        return { ...task, ...updatedTask };
+                    }
+                    return task;
+                });
+            }).addCase(updateTask.rejected, (state) => {
+                state.isLoading = false;
+                state.error = true;
+            }).addCase(deleteTask.pending, (state) => {
+                state.isLoading = true;
+                state.error = false;
+            }).addCase(deleteTask.fulfilled, (state, action) => {
+               const ItemId = action.payload;
+               state.tasks = state.tasks.filter((task)=>
+               task.id !== ItemId);
+            }).addCase(deleteTask.rejected, (state) => {
+            state.isLoading = false;
+            state.error = true;
             });
     },
 });
